@@ -8,7 +8,6 @@
     const playBtn = document.getElementById('playBtn');
     const playLbl = playBtn.querySelector('.play-label');
 
-    // ── Config ─────────────────────────────────────────────────────────────────
     const THEMES = [
         { name: 'Neon',   colors: ['#7c3aed','#06b6d4','#f43f5e','#facc15','#34d399','#f97316'] },
         { name: 'Ocean',  colors: ['#0ea5e9','#6366f1','#8b5cf6','#06b6d4','#2dd4bf','#38bdf8'] },
@@ -25,7 +24,6 @@
 
     const COUNTS = [3, 4, 5, 6];
 
-    // ── State (with localStorage persistence) ──────────────────────────────────
     let state = {
         theme:  parseInt(localStorage.getItem('cl-theme')  ?? '0'),
         speed:  parseInt(localStorage.getItem('cl-speed')  ?? '1'),
@@ -41,7 +39,6 @@
         localStorage.setItem('cl-dark',  state.dark ? 'dark' : 'light');
     }
 
-    // ── Build circles ──────────────────────────────────────────────────────────
     function buildCircles(n) {
         root.style.setProperty('--count', n);
         ring.innerHTML = '';
@@ -56,7 +53,6 @@
         }
     }
 
-    // ── Apply theme ────────────────────────────────────────────────────────────
     function applyTheme(idx) {
         const t = THEMES[idx];
         t.colors.forEach((c, i) => root.style.setProperty(`--c${i + 1}`, c));
@@ -66,7 +62,6 @@
         save();
     }
 
-    // ── Apply speed ────────────────────────────────────────────────────────────
     function applySpeed(idx) {
         root.style.setProperty('--speed', SPEEDS[idx].value);
         state.speed = idx;
@@ -75,7 +70,6 @@
         save();
     }
 
-    // ── Apply count ────────────────────────────────────────────────────────────
     function applyCount(n) {
         buildCircles(n);
         state.count = n;
@@ -84,7 +78,6 @@
         save();
     }
 
-    // ── Apply dark/light ───────────────────────────────────────────────────────
     function applyDark(dark) {
         body.classList.toggle('dark',  dark);
         body.classList.toggle('light', !dark);
@@ -92,7 +85,6 @@
         save();
     }
 
-    // ── Toggle pause ───────────────────────────────────────────────────────────
     function togglePlay() {
         state.paused = !state.paused;
         root.style.setProperty('--play', state.paused ? 'paused' : 'running');
@@ -102,22 +94,18 @@
         playBtn.setAttribute('aria-label', state.paused ? 'Play animation' : 'Pause animation');
     }
 
-    // ── Build controls ─────────────────────────────────────────────────────────
     function buildControls() {
-        // Theme swatches
         const themeBar = document.getElementById('themeBar');
         THEMES.forEach((t, i) => {
             const btn = document.createElement('button');
             btn.className = 'ctrl-swatch';
             btn.title = t.name;
             btn.setAttribute('aria-label', `${t.name} theme`);
-            // Gradient from first + third color of theme
             btn.style.background = `linear-gradient(135deg, ${t.colors[0]} 50%, ${t.colors[2]} 50%)`;
             btn.addEventListener('click', () => applyTheme(i));
             themeBar.appendChild(btn);
         });
 
-        // Speed buttons
         const speedBar = document.getElementById('speedBar');
         SPEEDS.forEach((s, i) => {
             const btn = document.createElement('button');
@@ -128,7 +116,6 @@
             speedBar.appendChild(btn);
         });
 
-        // Count buttons
         const countBar = document.getElementById('countBar');
         COUNTS.forEach(n => {
             const btn = document.createElement('button');
@@ -140,15 +127,12 @@
             countBar.appendChild(btn);
         });
 
-        // Play button
         playBtn.addEventListener('click', togglePlay);
 
-        // Dark toggle
         document.getElementById('darkToggle').addEventListener('click', () =>
             applyDark(!state.dark));
     }
 
-    // ── Keyboard ───────────────────────────────────────────────────────────────
     function initKeyboard() {
         document.addEventListener('keydown', e => {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -176,7 +160,6 @@
         });
     }
 
-    // ── Init ───────────────────────────────────────────────────────────────────
     buildControls();
     applyDark(state.dark);
     applyTheme(state.theme);
