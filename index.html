@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Circle Loader · menarzullayev</title>
+    <meta name="description" content="Animated circle loader with dynamic controls — speed, count, color themes, pause/play. Pure CSS + vanilla JS.">
+    <meta property="og:title"       content="Circle Loader · menarzullayev">
+    <meta property="og:description" content="CSS orbit animation · 5 themes · speed & count controls · dark/light mode">
+    <meta property="og:image"       content="./assets/og-image.png">
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+    <link rel="stylesheet" href="./assets/css/style.min.css">
+    <script src="./assets/js/main.js" defer></script>
+</head>
+<body class="dark">
+
+    <!-- ── Topbar ──────────────────────────────────────────────────── -->
+    <header class="topbar">
+        <div class="tb__brand">
+            <span class="tb__name">menarzullayev</span>
+            <span class="tb__sep">/</span>
+            <strong class="tb__title">Circle Loader</strong>
+        </div>
+        <div class="tb__right">
+            <span class="tb__tag">Pure CSS</span>
+            <span class="tb__tag">Vanilla JS</span>
+            <button class="tb__toggle" id="darkToggle" aria-label="Toggle dark/light mode">
+                <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg class="icon-sun"  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main scene ──────────────────────────────────────────────── -->
+    <main class="main">
+        <div class="scene">
+            <div class="ring-wrap">
+                <div class="ring" id="ring" aria-hidden="true"></div>
+            </div>
+            <p class="scene__label" id="stateLabel" aria-live="polite">Loading</p>
+        </div>
+    </main>
+
+    <!-- ── Bottom controls ─────────────────────────────────────────── -->
+    <footer class="controls" role="group" aria-label="Loader controls">
+
+        <div class="ctrl-group">
+            <span class="ctrl-label">Theme</span>
+            <div class="ctrl-row" id="themeBar" role="group" aria-label="Color themes"></div>
+        </div>
+
+        <div class="ctrl-group">
+            <span class="ctrl-label">Speed</span>
+            <div class="ctrl-row" id="speedBar" role="group" aria-label="Animation speed"></div>
+        </div>
+
+        <div class="ctrl-group">
+            <span class="ctrl-label">Circles</span>
+            <div class="ctrl-row" id="countBar" role="group" aria-label="Circle count"></div>
+        </div>
+
+        <div class="ctrl-group">
+            <button class="ctrl-play" id="playBtn" aria-label="Pause animation">
+                <svg class="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                <svg class="icon-play"  width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span class="play-label">Pause</span>
+            </button>
+        </div>
+
+    </footer>
+
+    <!-- ── Keyboard hint ───────────────────────────────────────────── -->
+    <div class="kbd-hint" aria-hidden="true">
+        <kbd>Space</kbd> pause &nbsp;·&nbsp;
+        <kbd>←</kbd><kbd>→</kbd> speed &nbsp;·&nbsp;
+        <kbd>3</kbd>–<kbd>6</kbd> circles &nbsp;·&nbsp;
+        <kbd>T</kbd> theme
+    </div>
+
+</body>
+</html>

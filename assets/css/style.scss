@@ -1,0 +1,333 @@
+// ── Tokens ────────────────────────────────────────────────────────────────────
+:root {
+    // Animation
+    --speed:   3s;
+    --play:    running;
+    --step:    30deg;
+    --count:   4;
+    --radius:  4.4em;
+
+    // Colors (Neon default)
+    --c1: #7c3aed;
+    --c2: #06b6d4;
+    --c3: #f43f5e;
+    --c4: #facc15;
+    --c5: #34d399;
+    --c6: #f97316;
+
+    // UI — dark
+    --bg:         #05050f;
+    --text:       #ffffff;
+    --text-dim:   rgba(255, 255, 255, 0.45);
+    --ctrl-bg:    rgba(255, 255, 255, 0.05);
+    --ctrl-bdr:   rgba(255, 255, 255, 0.08);
+    --ctrl-hover: rgba(255, 255, 255, 0.1);
+    --active-bg:  rgba(255, 255, 255, 0.14);
+    --tag-bg:     rgba(255, 255, 255, 0.06);
+    --tag-bdr:    rgba(255, 255, 255, 0.1);
+    --top-bg:     rgba(5, 5, 15, 0.8);
+    --kbd-bg:     rgba(255, 255, 255, 0.07);
+}
+
+body.light {
+    --bg:         #f0f0f5;
+    --text:       #0a0a10;
+    --text-dim:   rgba(0, 0, 0, 0.42);
+    --ctrl-bg:    rgba(0, 0, 0, 0.04);
+    --ctrl-bdr:   rgba(0, 0, 0, 0.1);
+    --ctrl-hover: rgba(0, 0, 0, 0.08);
+    --active-bg:  rgba(0, 0, 0, 0.12);
+    --tag-bg:     rgba(0, 0, 0, 0.05);
+    --tag-bdr:    rgba(0, 0, 0, 0.1);
+    --top-bg:     rgba(240, 240, 245, 0.85);
+    --kbd-bg:     rgba(0, 0, 0, 0.07);
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, sans-serif;
+    transition: background 0.4s, color 0.4s;
+    overflow: hidden;
+}
+
+// ── Topbar ────────────────────────────────────────────────────────────────────
+.topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1.4rem;
+    background: var(--top-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ctrl-bdr);
+    transition: background 0.4s, border-color 0.4s;
+}
+
+.tb__brand { display: flex; align-items: baseline; gap: 0.4rem; }
+.tb__name  { font-size: 0.7rem;  color: var(--text-dim); }
+.tb__sep   { font-size: 0.7rem;  color: var(--text-dim); opacity: 0.5; }
+.tb__title { font-size: 0.82rem; font-weight: 600; }
+
+.tb__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.tb__tag {
+    padding: 0.18rem 0.5rem;
+    border-radius: 99px;
+    border: 1px solid var(--tag-bdr);
+    background: var(--tag-bg);
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    transition: all 0.3s;
+}
+
+.tb__toggle {
+    width: 2rem; height: 2rem;
+    border: 1px solid var(--tag-bdr);
+    border-radius: 7px;
+    background: var(--tag-bg);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s;
+    &:hover { color: var(--text); border-color: var(--c1); }
+}
+
+body.dark  .icon-sun  { display: none; }
+body.dark  .icon-moon { display: block; }
+body.light .icon-moon { display: none; }
+body.light .icon-sun  { display: block; }
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+.main {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ── Scene ─────────────────────────────────────────────────────────────────────
+.scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.scene__label {
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    transition: color 0.4s;
+    user-select: none;
+}
+
+// ── Ring wrapper ──────────────────────────────────────────────────────────────
+.ring-wrap {
+    font-size: clamp(2rem, 5vw, 3rem);
+    position: relative;
+    width: 10em;
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// ── Ring (spinning group) ─────────────────────────────────────────────────────
+.ring {
+    position: absolute;
+    inset: 0;
+    animation: spin var(--speed) linear infinite;
+    animation-play-state: var(--play);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+// ── Arm + Circle ──────────────────────────────────────────────────────────────
+.ring__arm {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Each arm is rotated to its orbit position
+    transform: rotate(calc(var(--i, 0) * var(--step)));
+}
+
+.ring__circle {
+    position: absolute;
+    top: 0.5em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    animation: pulse calc(var(--speed) * 1.6) ease-in-out infinite;
+    animation-play-state: var(--play);
+    animation-delay: calc(var(--i, 0) * calc(var(--speed) / var(--count)) * -1);
+    will-change: transform, opacity;
+}
+
+// Color per nth-child
+@for $n from 1 through 6 {
+    .ring__arm:nth-child(#{$n}) .ring__circle {
+        background:  var(--c#{$n});
+        box-shadow:
+            0 0 0.6em 0.15em var(--c#{$n}),
+            0 0 1.8em 0.4em  rgba(0, 0, 0, 0.2);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1);    opacity: 1;    }
+    50%       { transform: scale(0.35); opacity: 0.45; }
+}
+
+// ── Ambient glow behind ring (color changes with theme) ───────────────────────
+.ring-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 15%;
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at 30% 30%, var(--c1), transparent 60%),
+        radial-gradient(ellipse at 70% 70%, var(--c3), transparent 60%);
+    opacity: 0.09;
+    filter: blur(12px);
+    animation: glow-rot calc(var(--speed) * 4) linear infinite;
+    animation-play-state: var(--play);
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+
+body.light .ring-wrap::after { opacity: 0.12; }
+
+@keyframes glow-rot {
+    to { transform: rotate(-360deg); }
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────────
+.controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    padding: 0.75rem 1.4rem;
+    background: var(--top-bg);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--ctrl-bdr);
+    transition: background 0.4s, border-color 0.4s;
+}
+
+.ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ctrl-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.ctrl-row { display: flex; gap: 0.3rem; }
+
+// Generic control button
+.ctrl-btn {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--ctrl-bdr);
+    border-radius: 6px;
+    background: var(--ctrl-bg);
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.18s;
+
+    &:hover  { background: var(--ctrl-hover); color: var(--text); }
+    &.active { background: var(--active-bg);  color: var(--text); border-color: var(--c1); }
+}
+
+// Color swatch button
+.ctrl-swatch {
+    width: 1.5rem; height: 1.5rem;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.18s;
+    outline: none;
+
+    &:hover  { transform: scale(1.15); }
+    &.active { border-color: var(--text); transform: scale(1.1); }
+}
+
+// Play/Pause button
+.ctrl-play {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.85rem;
+    border: 1px solid var(--ctrl-bdr);
+    border-radius: 6px;
+    background: var(--ctrl-bg);
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.18s;
+
+    &:hover { background: var(--ctrl-hover); color: var(--text); }
+}
+
+// Icon state
+body:not(.paused) .icon-pause { display: block; }
+body:not(.paused) .icon-play  { display: none; }
+body.paused       .icon-pause { display: none; }
+body.paused       .icon-play  { display: block; }
+
+// ── Keyboard hint ─────────────────────────────────────────────────────────────
+.kbd-hint {
+    position: fixed;
+    bottom: 4.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.64rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.7;
+    transition: color 0.4s;
+
+    kbd {
+        display: inline-block;
+        padding: 0.1rem 0.35rem;
+        border: 1px solid var(--ctrl-bdr);
+        border-radius: 3px;
+        background: var(--kbd-bg);
+        font-family: inherit;
+        font-size: inherit;
+        transition: all 0.4s;
+    }
+}
+
+@media (max-width: 600px) {
+    .kbd-hint  { display: none; }
+    .tb__right .tb__tag { display: none; }
+}

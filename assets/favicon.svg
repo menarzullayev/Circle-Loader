@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#05050f"/>
+  <!-- Orbiting circles -->
+  <g transform="translate(16,16)">
+    <!-- orbit path hint -->
+    <circle cx="0" cy="0" r="9" fill="none" stroke="rgba(124,58,237,0.15)" stroke-width="0.5"/>
+    <!-- circles at 0°, 30°, 60°, 90° -->
+    <circle cx="0"    cy="-9"   r="2.2" fill="#7c3aed"/>
+    <circle cx="4.5"  cy="-7.8" r="2.2" fill="#06b6d4"/>
+    <circle cx="7.8"  cy="-4.5" r="2.2" fill="#f43f5e"/>
+    <circle cx="9"    cy="0"    r="2.2" fill="#facc15"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+{
+    "name": "circle-loader",
+    "scripts": {
+        "scss":   "npx sass assets/css/style.scss assets/css/style.min.css --style=compressed --no-source-map",
+        "serve":  "npx serve . -p 8066",
+        "deploy": "npx wrangler pages deploy . --project-name=circle-loader --branch=main"
+    }
+}
